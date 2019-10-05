@@ -1,7 +1,11 @@
 package name.denyago.commenttree.api
 
 import com.beust.klaxon.Klaxon
-import io.github.rybalkinsd.kohttp.ext.httpGet
+import io.github.rybalkinsd.kohttp.ext.httpGetAsync
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.runBlocking
 import name.denyago.commenttree.data.Comment
 import name.denyago.commenttree.log
 
@@ -9,15 +13,23 @@ class Client(val url: String) {
     data class ToDoItem(val userId: Int, val id: Int, val title: String, val completed: Boolean)
 
     fun getComments(ids: List<Int>): Map<Int, Comment> =
-        ids.map {
-            val body = (url + "$it").httpGet().body()?.string()
-            Klaxon().parse<ToDoItem>(body ?: "")
-        }.filterNotNull().fold(mutableMapOf(), { acc, item ->
-            log(item.toString())
-            acc[item.id] = Comment(item.id, item.title)
-            acc
-        })
-
+        runBlocking(Dispatchers.Default) {
+            ids.map {
+                async {
+                    val id = it
+                    log("[ $id ] Calling ${(url + "$id")}")
+                    (url + "$id").httpGetAsync().await().use {
+                        val body = it.body()?.string()
+                        Klaxon().parse<ToDoItem>(body ?: "").also {
+                            log("[ $id ] got $it")
+                        }
+                    }
+                }
+            }.awaitAll().filterNotNull().fold(mutableMapOf<Int, Comment>()) { acc, item ->
+                acc[item.id] = Comment(item.id, item.title)
+                acc
+            }
+        }
 }
 
 //suspend fun getComment(id: Int, tryNo: Int = 0) {

@@ -23,6 +23,8 @@ fun main() {
     println(
         TreePopulate("https://jsonplaceholder.typicode.com/todos/", tree).populatedToString()
     )
+
+    System.exit(0)
 }
 
 
