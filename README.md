@@ -1,6 +1,6 @@
 # comment-tree
 
-[![CircleCI](https://circleci.com/gh/denyago/comment-tree.svg?style=svg)](https://circleci.com/gh/denyago/comment-tree)
+[![CircleCI](https://circleci.com/gh/denyago/comment-tree.svg?style=svg)](https://app.circleci.com/github/denyago/comment-tree/pipelines)
 
 Learning Kotlin by implementing a simple comments tree with HTTP client calls. Inspired by https://habr.com/ru/post/469441/
 
