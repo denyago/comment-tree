@@ -20,5 +20,4 @@ class TreePrinterTest : DescribeSpec() {
             }
         }
     }
-
 }
