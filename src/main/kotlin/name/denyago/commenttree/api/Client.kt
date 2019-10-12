@@ -9,10 +9,14 @@ import kotlinx.coroutines.runBlocking
 import name.denyago.commenttree.data.Comment
 import name.denyago.commenttree.log
 
-class Client(private val url: String) {
+interface Clientable {
+    fun getComments(ids: List<Int>): Map<Int, Comment>
+}
+
+class Client(private val url: String) : Clientable {
     data class ToDoItem(val userId: Int, val id: Int, val title: String, val completed: Boolean)
 
-    fun getComments(ids: List<Int>): Map<Int, Comment> =
+    override fun getComments(ids: List<Int>): Map<Int, Comment> =
         runBlocking(Dispatchers.Default) {
             ids.map { id ->
                 async {

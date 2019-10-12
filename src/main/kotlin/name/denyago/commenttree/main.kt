@@ -1,8 +1,11 @@
 package name.denyago.commenttree
 
 import name.denyago.commenttree.api.Client
+import name.denyago.commenttree.api.Clientable
 import name.denyago.commenttree.data.Node
+import name.denyago.commenttree.tree.TreeEnrichable
 import name.denyago.commenttree.tree.TreeEnricher
+import name.denyago.commenttree.tree.TreePrintable
 import name.denyago.commenttree.tree.TreePrinter
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
@@ -27,15 +30,15 @@ val tree = Node(
 )
 const val SUCCESS = 0
 
-val myModule = module {
-    single { TreeEnricher }
-    single { TreePrinter }
-    single { Client(getProperty("url")) }
+val runDependencies = module {
+    single<TreeEnrichable> { TreeEnricher }
+    single<TreePrintable> { TreePrinter }
+    single<Clientable> { Client(getProperty("url")) }
 }
 
 fun main() {
     startKoin {
-        modules(myModule).properties(mapOf("url" to "https://jsonplaceholder.typicode.com/todos/"))
+        modules(runDependencies).properties(mapOf("url" to "https://jsonplaceholder.typicode.com/todos/"))
     }
 
     println(
