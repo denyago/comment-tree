@@ -1,5 +1,6 @@
 package name.denyago.commenttree
 
+import io.github.rybalkinsd.kohttp.client.defaultHttpClient
 import name.denyago.commenttree.api.Client
 import name.denyago.commenttree.api.Clientable
 import name.denyago.commenttree.api.ToDoApi
@@ -35,12 +36,13 @@ const val SUCCESS = 0
 
 val runDependencies = module {
     single<Logable> { Logger(LoggerFactory.getLogger("CommentTree")) }
+    single { defaultHttpClient }
 
     single<TreeEnrichable> { TreeEnricher }
     single<TreePrintable> { TreePrinter }
     single<Clientable> { Client() }
 
-    single<ToDoApiable> { ToDoApi(getProperty("url"), get()) }
+    single<ToDoApiable> { ToDoApi(getProperty("url"), get(), get()) }
 }
 
 fun main() {

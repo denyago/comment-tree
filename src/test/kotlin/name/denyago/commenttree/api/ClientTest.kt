@@ -21,15 +21,6 @@ class ClientTest : DescribeSpec(), KoinTest {
             val toDoItems = mapOf(1 to ToDoItem(1, "one"), 3 to ToDoItem(3, "three"))
             val testToDoApi = object : ToDoApiable {
                 override suspend fun getToDoItem(id: Int): ToDoItem? = toDoItems[id]
-
-                val rawJsonBody = """
-                  {
-                    "userId":1,
-                    "id":1,
-                    "title":"delectus aut autem",
-                    "completed":false
-                  }
-                  """.trimIndent()
             }
 
             it("returns a map of Comments") {
