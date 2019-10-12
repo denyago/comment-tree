@@ -2,6 +2,8 @@ package name.denyago.commenttree
 
 import name.denyago.commenttree.api.Client
 import name.denyago.commenttree.api.Clientable
+import name.denyago.commenttree.api.ToDoApi
+import name.denyago.commenttree.api.ToDoApiable
 import name.denyago.commenttree.data.Node
 import name.denyago.commenttree.tree.TreeEnrichable
 import name.denyago.commenttree.tree.TreeEnricher
@@ -33,9 +35,12 @@ const val SUCCESS = 0
 
 val runDependencies = module {
     single<Logable> { Logger(LoggerFactory.getLogger("CommentTree")) }
+
     single<TreeEnrichable> { TreeEnricher }
     single<TreePrintable> { TreePrinter }
-    single<Clientable> { Client(getProperty("url")) }
+    single<Clientable> { Client() }
+
+    single<ToDoApiable> { ToDoApi(getProperty("url"), get()) }
 }
 
 fun main() {

@@ -17,8 +17,6 @@ class LoggerTest : DescribeSpec() {
             it("logs the message using a logger implementation provided") {
                 Logger(testSlf4jLogger).log(testMessage) shouldBe Unit
             }
-
         }
     }
-
 }
