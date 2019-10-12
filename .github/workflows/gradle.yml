@@ -13,5 +13,7 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 10
-    - name: Test with Gradle
-      run: ./gradlew testCoverage detekt
+    - uses: eskatos/gradle-command-action@v1
+      with:
+        gradle-version: 5.2.1
+        arguments: testCoverage detekt
