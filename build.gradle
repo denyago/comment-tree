@@ -14,8 +14,8 @@ version '0.0.1'
 
 repositories {
     mavenCentral()
-    maven { url 'https://jitpack.io' }
     jcenter()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -32,7 +32,11 @@ dependencies {
     implementation "io.github.rybalkinsd:kohttp:0.11.0" // HTTP Client
     implementation 'com.beust:klaxon:5.0.1' // JSON DeSer
 
+    def koin_version = "2.0.1"
+    implementation "org.koin:koin-core:$koin_version" // DI
+
     testImplementation 'io.kotlintest:kotlintest-runner-junit5:3.3.2'
+    testImplementation "org.koin:koin-test:$koin_version"
 }
 
 compileKotlin {
