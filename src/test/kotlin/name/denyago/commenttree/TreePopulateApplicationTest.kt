@@ -1,5 +1,6 @@
 package name.denyago.commenttree
 
+import io.kotlintest.Spec
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.DescribeSpec
 import name.denyago.commenttree.api.Clientable
@@ -8,6 +9,7 @@ import name.denyago.commenttree.data.Node
 import name.denyago.commenttree.tree.TreeEnrichable
 import name.denyago.commenttree.tree.TreePrintable
 import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import org.koin.test.KoinTest
 
@@ -44,6 +46,9 @@ class TreePopulateApplicationTest : DescribeSpec(), KoinTest {
                 return rawCommnets
             }
         }
+        val testLogger = object : Logable {
+            override fun log(msg: String?) = Unit
+        }
 
         describe("populatedToString") {
 
@@ -51,6 +56,9 @@ class TreePopulateApplicationTest : DescribeSpec(), KoinTest {
                 startKoin {
                     modules(
                         module {
+                            single<Logable> {
+                                testLogger
+                            }
                             single<TreePrintable> { testTreePrinter }
                             single<TreeEnrichable> { testTreeEnricher }
                             single<Clientable> { testClient }
@@ -61,6 +69,9 @@ class TreePopulateApplicationTest : DescribeSpec(), KoinTest {
             }
         }
     }
+
+    override fun afterSpec(spec: Spec) {
+        super.afterSpec(spec)
+        stopKoin()
+    }
 }
-
-

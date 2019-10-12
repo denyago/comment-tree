@@ -9,6 +9,7 @@ import name.denyago.commenttree.tree.TreePrintable
 import name.denyago.commenttree.tree.TreePrinter
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
+import org.slf4j.LoggerFactory
 import kotlin.system.exitProcess
 
 @Suppress("MagicNumber")
@@ -31,6 +32,7 @@ val tree = Node(
 const val SUCCESS = 0
 
 val runDependencies = module {
+    single<Logable> { Logger(LoggerFactory.getLogger("CommentTree")) }
     single<TreeEnrichable> { TreeEnricher }
     single<TreePrintable> { TreePrinter }
     single<Clientable> { Client(getProperty("url")) }

@@ -1,10 +1,14 @@
 package name.denyago.commenttree
 
 import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
-val log: Logger = LoggerFactory.getLogger("CommentTree")
+interface Logable {
+    fun log(msg: String?)
+}
 
-fun log(msg: String?) {
-    log.info(msg)
+class Logger(private val logger: Logger) : Logable {
+
+    override fun log(msg: String?) {
+        logger.info(msg)
+    }
 }

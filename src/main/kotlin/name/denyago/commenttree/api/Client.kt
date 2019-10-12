@@ -6,25 +6,29 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
+import name.denyago.commenttree.Logable
 import name.denyago.commenttree.data.Comment
-import name.denyago.commenttree.log
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
 interface Clientable {
     fun getComments(ids: List<Int>): Map<Int, Comment>
 }
 
-class Client(private val url: String) : Clientable {
+class Client(private val url: String) : Clientable, KoinComponent {
     data class ToDoItem(val userId: Int, val id: Int, val title: String, val completed: Boolean)
+
+    private val logger by inject<Logable>()
 
     override fun getComments(ids: List<Int>): Map<Int, Comment> =
         runBlocking(Dispatchers.Default) {
             ids.map { id ->
                 async {
-                    log("[ $id ] Calling ${(url + "$id")}")
+                    logger.log("[ $id ] Calling ${(url + "$id")}")
                     (url + "$id").httpGetAsync().await().use { response ->
                         val body = response.body()?.string()
                         Klaxon().parse<ToDoItem>(body ?: "").also { item ->
-                            log("[ $id ] got $item")
+                            logger.log("[ $id ] got $item")
                         }
                     }
                 }
